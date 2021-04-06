@@ -1,0 +1,330 @@
+openapi: "3.0.0"
+
+info:
+  title: Test Schema
+  description: API to illustrate OpenAlchemy joined inheritance.
+  version: "0.1"
+
+paths:
+  /files/{file_id}:
+    get:
+      tags: [File]
+      summary: Used to retrieve a file by ID.
+      operationId: app.api.file_get
+      parameters:
+        - name: file_id
+          in: path
+          required: true
+          description: The id of the file to retrieve
+          schema:
+            type: integer
+
+      responses:
+        200:
+          description: Return a file.
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        302:
+          description: Return a redirect to file.
+        400:
+          description: Bad request
+        404:
+          description: No file was found
+        500:
+          description: internal server error
+
+    delete:
+      tags: [File]
+      summary: Used to delete a file by ID.
+      operationId: app.api.file_delete
+      parameters:
+        - name: file_id
+          in: path
+          required: true
+          description: The id of the file to delete
+          schema:
+            type: integer
+
+      responses:
+        202:
+          description: Return the deleted files' metadata.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/File"
+        400:
+          description: Bad request
+        404:
+          description: No file was found
+        500:
+          description: internal server error
+          
+  /files/{file_id}/head:
+    head:
+      tags: [File]
+      summary: Used to retrieve a file headers by ID.
+      operationId: app.api.file_head
+      parameters:
+        - name: file_id
+          in: path
+          required: true
+          description: The id of the file to retrieve
+          schema:
+            type: integer
+
+      responses:
+        200:
+          description: Return files' metadata.
+        400:
+          description: Bad request
+        404:
+          description: No file was found
+        500:
+          description: internal server error
+          
+
+  /files:
+    post:
+      tags: [File]
+      summary: Used to post a file
+      operationId: app.api.file_post
+      requestBody:
+        description: The file to save.
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+
+      parameters:
+        - name: name
+          in: query
+          schema:
+            type: string
+          description: The name of the file.
+          example: Submission Email.pdf
+          required: true
+        - name: dir_name
+          in: query
+          schema:
+            type: string
+          description: Directory name.
+          example: policy_files/submissions/12344
+          required: true
+        - name: mimetype
+          in: query
+          schema:
+            type: string
+          required: true
+          description: The type of the file.
+          example: application/pdf
+        - name: origin_table
+          in: query
+          schema:
+            type: string
+          required: true
+          description: The original table of the file.
+          example: doc_gen_generated_documents
+        - name: origin_file_col
+          in: query
+          schema:
+            type: string
+          required: true
+          description: The origonal table file column of the file.
+          example: office_file_id
+        - name: origin_id
+          in: query
+          schema:
+            type: integer
+          description: The original id of the file.
+          example: "1282200"
+          required: true
+        - name: file_id
+          in: query
+          schema:
+            type: integer
+          required: false
+          description: The existing records id of the file.
+          example: "123"
+        - name: is_malicious
+          in: query
+          schema:
+            type: boolean
+          description: Indication whether the file was malicious or not - currently not in use.
+          example: "false"
+
+      responses:
+        201:
+          description: file saved
+        400:
+          description: bad request
+        500:
+          description: internal server error
+
+    put:
+      tags: [File]
+      summary: Used to put a file
+      operationId: app.api.file_put
+      requestBody:
+        description: The new file content.
+        required: false
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+
+      parameters:
+        - name: file_id
+          in: query
+          schema:
+            type: integer
+          required: true
+          description: The existing records id of the file.
+          example: "123"
+        - name: name
+          in: query
+          schema:
+            type: string
+          description: The new name of the file.
+          example: Submission Email.pdf
+          required: false
+        - name: dir_name
+          in: query
+          schema:
+            type: string
+          required: false
+          description: Directory name.
+          example: policy_files/submissions/12344
+        - name: mimetype
+          in: query
+          schema:
+            type: string
+          required: false
+          description: The new type of the file.
+          example: application/pdf
+        - name: is_malicious
+          in: query
+          schema:
+            type: boolean
+          description: Indication whether the file was malicious or not - currently not in use.
+          example: "false"
+
+      responses:
+        204:
+          description: resource updated successfully
+        400:
+          description: bad request
+        500:
+          description: internal server error
+
+components:
+  schemas:
+    File:
+      description: File that was uploaded.
+      type: object
+      x-tablename: files
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the file.
+          example: 1149795
+          x-primary-key: true
+          x-autoincrement: true
+        name:
+          type: string
+          nullable: false
+          minLength: 1
+          maxLength: 256
+          writeOnly: true
+          description: The name of the file.
+          example: Submission Email.pdf
+        mimetype:
+          type: string
+          nullable: false
+          minLength: 1
+          maxLength: 100
+          description: The type of the file.
+          example: application/pdf
+        deleted:
+          type: boolean
+          nullable: false
+          writeOnly: true
+          description: Indication whether the file was deleted or not.
+          example: false
+        db_content:
+          type: string
+          format: binary
+          writeOnly: true
+          description: File content.
+        is_malicious:
+          type: boolean
+          nullable: false
+          default: false
+          description: Indication whether the file was malicious or not - currently not in use.
+          example: false
+        origin_table:
+          type: string
+          nullable: false
+          minLength: 1
+          maxLength: 100
+          description: The original table of the file.
+          example: doc_gen_generated_documents
+        origin_file_col:
+          type: string
+          nullable: false
+          minLength: 1
+          maxLength: 100
+          description: The origonal table file column of the file.
+          example: office_file_id
+        origin_id:
+          type: integer
+          description: The original id of the file.
+          example: 1282200
+        protocol:
+          type: string
+          writeOnly: true
+          minLength: 2
+          maxLength: 10
+          description: protocol.
+          example: file, s3, gcs
+        bucket:
+          type: string
+          writeOnly: true
+          minLength: 1
+          maxLength: 50
+          description: Bucket name.
+          example: cyberjack_files
+        dir_name:
+          type: string
+          writeOnly: true
+          minLength: 1
+          maxLength: 256
+          description: Directory name.
+          example: policy_files/submissions/12344
+        dest_file_name:
+          type: string
+          writeOnly: true
+          minLength: 1
+          maxLength: 256
+          description: The internal name of the file.
+          example: id, actual file name as attribute (Submission Email.pdf).
+        created_time:
+          type: string
+          format: date-time
+          nullable: false
+          description: The create time of the file.
+          example: 2017-07-21T17:32:28Z|
+        deleted_time:
+          type: string
+          format: date-time
+          description: The delete time of the file.
+          example: 2019-07-21T17:32:28Z|
+
+servers:
+  - description: Local server
+    url: http://localhost:8080/api
