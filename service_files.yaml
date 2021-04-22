@@ -27,7 +27,7 @@ paths:
               schema:
                 type: string
                 format: binary
-            example: b"pdf123"   
+            example: pdf123 
         302:
           description: Return a redirect to file.
         400:
