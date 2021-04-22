@@ -27,8 +27,8 @@ paths:
               schema:
                 type: string
                 format: binary
-                examples:
-                  content: "123"
+              examples:
+                value: "123"
         302:
           description: Return a redirect to file.
         400:
