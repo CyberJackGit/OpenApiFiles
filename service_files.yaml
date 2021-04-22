@@ -27,11 +27,6 @@ paths:
               schema:
                 type: string
                 format: binary
-                examples:
-                  good:
-                    value:"%PDF-1.\ntrailer<</Root<</Pages<</Kids[<</MediaBox[0 0 3 3]>>]>>>>>>\n"
-                  bad:
-                    value:"123"
         302:
           description: Return a redirect to file.
         400:
