@@ -28,7 +28,7 @@ paths:
                 type: string
                 format: binary
               example:
-                body: "pdf123"   
+                body: b"pdf123"   
         302:
           description: Return a redirect to file.
         400:
