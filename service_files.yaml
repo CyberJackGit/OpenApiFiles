@@ -27,7 +27,7 @@ paths:
               schema:
                 type: string
                 format: binary
-                example: PDF-1.trailer<</Root<</Pages<</Kids[<</MediaBox[0 0 3 3]>>]>>>>>>
+                example: PDF-1
         302:
           description: Return a redirect to file.
         400:
