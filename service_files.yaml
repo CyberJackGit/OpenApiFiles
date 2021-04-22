@@ -27,8 +27,7 @@ paths:
               schema:
                 type: string
                 format: binary
-                example:
-                  body:"%PDF-1.\ntrailer<</Root<</Pages<</Kids[<</MediaBox[0 0 3 3]>>]>>>>>>\n"
+                example: "%PDF-1.\ntrailer<</Root<</Pages<</Kids[<</MediaBox[0 0 3 3]>>]>>>>>>\n"
         302:
           description: Return a redirect to file.
         400:
