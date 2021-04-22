@@ -27,9 +27,6 @@ paths:
               schema:
                 type: string
                 format: binary
-                example: 
-                  description: PDF-1
-                  value: galabatytyt
         302:
           description: Return a redirect to file.
         400:
