@@ -28,7 +28,7 @@ paths:
                 type: string
                 format: binary
               example:
-                value: gagalala
+                body: gagalala
         302:
           description: Return a redirect to file.
         400:
