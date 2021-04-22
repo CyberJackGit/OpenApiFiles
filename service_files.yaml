@@ -27,11 +27,8 @@ paths:
               schema:
                 type: string
                 format: binary
-              examples:
-                Jessica:
-                  value:
-                    id: 10
-                    name: Jessica Smith
+              example:
+                body: "pdf123"   
         302:
           description: Return a redirect to file.
         400:
